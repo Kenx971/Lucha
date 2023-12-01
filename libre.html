@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Inscripción en el Club de Lucha Libre</title>
+  <style>
+    body {
+      background-image: url('10.png');
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    h1 {background-color: #589A50;
+    color:white ;
+    text-indent: 10px;
+    min-width:600px;
+    max-width:800px;
+    
+    border-radius:7px;
+    position:fixed;
+    top:5px; left:97px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #3498db;
+      color: #fff;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #FA483E;
+    }
+
+    video {
+      width: 450px;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    #result {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    /* Estilos para el formulario */
+    form {
+      background-image: url('2.png');
+      color: #13504E;
+      text-indent: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      position:fixed;
+      top:65px; left:97px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+
+    form label,
+    form input {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Inscripción en el Club de Lucha Libre</h1>
+  <br>
+  <!-- Formulario de inscripción -->
+  <form id="registrationForm">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="apellido">Apellido:</label>
+    <input type="text" id="apellido" name="apellido" required><br><br>
+
+    <label for="correo">Correo electrónico:</label>
+    <input type="email" id="correo" name="correo" required><br><br>
+
+    <label for="edad">Edad:</label>
+    <input type="number" id="edad" name="edad" required><br><br>
+
+    <label for="experiencia">Años de experiencia en Lucha Libre:</label>
+    <input type="number" id="experiencia" name="experiencia" required><br><br>
+
+    <input type="submit" value="Registrarse">
+  </form>
+
+  <!-- Elementos para capturar la foto y la evaluación -->
+  <button class="btn" id="startCameraBtn">Iniciar la cámara</button>
+  <button class="btn" id="takePhotoBtn">Tomar una foto</button>
+  <div id="result"></div>
+  <video id="videoElement" autoplay></video>
+
+  <script>
+    const startCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const videoElement = document.getElementById('videoElement');
+        videoElement.srcObject = stream;
+      } catch (err) {
+        console.error('Acceso denegado a la cámara: ', err);
+      }
+    };
+
+    const takePhoto = () => {
+      const videoElement = document.getElementById('videoElement');
+      const canvasElement = document.createElement('canvas');
+      const context = canvasElement.getContext('2d');
+
+      canvasElement.width = videoElement.videoWidth;
+      canvasElement.height = videoElement.videoHeight;
+      context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+      const imgElement = document.createElement('img');
+      imgElement.src = canvasElement.toDataURL('image/png');
+
+      // Evaluación aleatoria
+      const randomNum = Math.random();
+      let result = '';
+
+      if (randomNum < 0.1) {
+        result = "Te ves como El Santo";
+      } else if (randomNum < 0.2) {
+        result = "Te ves como Blue Demon";
+      } else if (randomNum < 0.4) {
+        result = "Te ves como Rey Mysterio";
+      } else if (randomNum < 0.8) {
+        result = "Te ves como Mistico";
+      } else if (randomNum < 0.6) {
+        result = "Te ves como Alberto del Rio"; 
+      } else {
+        result = "Te ves como Grand Guerrero";
+      }
+
+      const resultDisplay = document.querySelector('#result');
+      resultDisplay.textContent = `Resultado: ${result}`;
+    };
+
+    document.querySelector('#startCameraBtn').addEventListener('click', startCamera);
+    document.querySelector('#takePhotoBtn').addEventListener('click', takePhoto);
+
+    // Manejo de la presentación del formulario
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const nombre = document.getElementById('nombre').value;
+      const apellido = document.getElementById('apellido').value;
+      const correo = document.getElementById('correo').value;
+      const edad = document.getElementById('edad').value;
+      const experiencia = document.getElementById('experiencia').value;
+
+      console.log('Nombre:', nombre);
+      console.log('Apellido:', apellido);
+      console.log('Correo electrónico:', correo);
+      console.log('Edad:', edad);
+      console.log('Experiencia en Lucha Libre:', experiencia);
+
+      this.reset();
+    });
+  </script>
+</body>
+</html>
+
